@@ -1,20 +1,26 @@
 var webpack = require('webpack');
 var path  = require('path');
 module.exports = {
-  devtool : 'inline-source-map',
-  entry : [
-    'webpack-hot-middleware/client',
-    'webpack/hot/dev-server',
-    path.join(__dirname,'/public/script.js')
-  ],
+  devtool : 'eval',
+  entry : path.join(__dirname,'/public/script.js'),
+
   output : {
     path : path.join(__dirname,'/public'),
     filename: "bundle.js",
     publicPath : '/'
   },
   plugins:[
-    new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': '"production"'
+    }),
+
+    new webpack.optimize.UglifyJsPlugin({
+      compress: { warnings: false },
+      comments: false,
+      minimize: true
+    })
+    // new webpack.NoEmitOnErrorsPlugin(),
+    // new webpack.HotModuleReplacementPlugin()
   ],
   module: {
     loaders:[
@@ -22,9 +28,6 @@ module.exports = {
         test: /\.js$/,
         exclude: /(node_modules)/,
         loader:'babel-loader',
-        query:{
-          presets:['es2016','stage-2','react','react-hmre']
-        }
       },
       {
         test: /\.css$/,

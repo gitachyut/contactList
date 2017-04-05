@@ -1,5 +1,6 @@
-node_modules
-public
-views
 .git
-.babelrc
+node_modules
+public/app2
+public/app
+public/css
+public/lcm
